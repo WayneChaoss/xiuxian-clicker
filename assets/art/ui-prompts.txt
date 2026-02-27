@@ -1,0 +1,19 @@
+## 游戏主界面框架
+ancient Chinese scroll interface, jade and bronze accents, calligraphy elements, minimalist design, main game interface, HUD design, health bar, resource counters, skill buttons, Chinese fantasy game UI, 1920x1080 resolution, layered design
+---
+
+## 血条/进度条
+ancient Chinese scroll interface, jade and bronze accents, calligraphy elements, minimalist design, health bar design, progress bar, gradient fill, ornate border, Chinese pattern decorations, game UI element
+---
+
+## 技能图标背景
+ancient Chinese scroll interface, jade and bronze accents, calligraphy elements, minimalist design, skill button frame, circular border, glowing effect, jade texture, rune patterns, game icon background
+---
+
+## 按钮样式
+ancient Chinese scroll interface, jade and bronze accents, calligraphy elements, minimalist design, game button design, rectangular with rounded corners, bronze and jade materials, Chinese calligraphy style text area
+---
+
+## 弹窗/面板
+ancient Chinese scroll interface, jade and bronze accents, calligraphy elements, minimalist design, modal dialog design, ancient scroll aesthetic, decorative borders, semi-transparent background, Chinese fantasy game panel
+---

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>修仙点击 - Tap Titans修仙版</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ========== 2.1 顶部状态栏 ========== -->
+    <div class="header">
+        <!-- 左侧：灵石 + DPS -->
+        <div class="resource-group">
+            <div class="resource-item">
+                <span class="resource-icon">💎</span>
+                <div class="resource-info">
+                    <span class="resource-value" id="lingShi">0</span>
+                    <span class="resource-label">灵石</span>
+                </div>
+            </div>
+            <div class="resource-sub">
+                <span id="dpsDisplay">DPS: 0</span>
+            </div>
+        </div>
+        
+        <!-- 中间：境界 + 层数 + 进度 -->
+        <div class="level-info">
+            <div class="realm-name" id="realmName">练气期</div>
+            <div class="level-display">
+                <span id="currentLevel">第 1 层</span>
+            </div>
+            <div class="level-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="levelProgressFill"></div>
+                </div>
+                <span class="progress-text" id="levelProgressText">1 / 10</span>
+            </div>
+        </div>
+        
+        <!-- 右侧：道心 + SPS -->
+        <div class="resource-group">
+            <div class="resource-item">
+                <span class="resource-icon">⚡</span>
+                <div class="resource-info">
+                    <span class="resource-value" id="daoXin">0</span>
+                    <span class="resource-label">道心</span>
+                </div>
+            </div>
+            <div class="resource-sub">
+                <span id="spsDisplay">SPS: 0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 2.2 战斗区域 ========== -->
+    <div class="battle-area">
+        <!-- 伤害数字容器 -->
+        <div class="damage-container" id="damageContainer"></div>
+        
+        <!-- BOSS倒计时（平时隐藏） -->
+        <div class="boss-timer" id="bossTimer" style="display: none;">
+            <span class="timer-label">限时</span>
+            <span class="timer-value" id="bossTimeLeft">30</span>
+            <div class="timer-bar">
+                <div class="timer-fill" id="bossTimerFill"></div>
+            </div>
+        </div>
+        
+        <!-- 战斗主体 -->
+        <div class="battle-scene">
+            <!-- 主角 -->
+            <div class="hero-section">
+                <div class="hero-avatar" id="heroAvatar">
+                    <!-- 占位符：主角立绘 -->
+                    <div class="placeholder-hero">🧘</div>
+                </div>
+                <div class="hero-damage" id="heroDamage">点击伤害: 10</div>
+            </div>
+            
+            <!-- 灵兽跟随区 -->
+            <div class="spirits-follow" id="spiritsFollow">
+                <!-- 动态生成跟随的灵兽 -->
+            </div>
+            
+            <!-- 怪物 -->
+            <div class="monster-section" id="monsterSection">
+                <div class="monster-name" id="monsterName">野狼妖</div>
+                <div class="monster-avatar" id="monsterAvatar">
+                    <!-- 占位符：怪物立绘 -->
+                    <div class="placeholder-monster">🐺</div>
+                </div>
+                <div class="monster-hp">
+                    <div class="hp-bar">
+                        <div class="hp-fill" id="monsterHpFill"></div>
+                        <span class="hp-text" id="monsterHpText">100 / 100</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 点击区域（覆盖整个战斗区） -->
+        <div class="click-area" id="clickArea"></div>
+        
+        <!-- 金币飞入动画容器 -->
+        <div class="gold-fly-container" id="goldFlyContainer"></div>
+    </div>
+
+    <!-- ========== 2.3 灵兽列表面板（TT2风格） ========== -->
+    <div class="spirit-panel" id="spiritPanel">
+        <div class="panel-header">
+            <h3>🐉 灵兽</h3>
+            <span class="toggle-btn" id="toggleSpirit">▼</span>
+        </div>
+        <div class="spirit-list" id="spiritList">
+            <!-- 灵兽项模板（动态生成） -->
+            <!-- 
+            <div class="spirit-item">
+                <div class="spirit-avatar">[图标]</div>
+                <div class="spirit-info">
+                    <div class="spirit-name">青龙</div>
+                    <div class="spirit-level">等级 1</div>
+                    <div class="spirit-dps">DPS: 5</div>
+                </div>
+                <button class="spirit-upgrade-btn">
+                    <div class="upgrade-cost">500 💎</div>
+                    <div class="upgrade-label">召唤</div>
+                </button>
+            </div>
+            -->
+        </div>
+    </div>
+
+    <!-- ========== 2.4 圆形技能栏（TT2风格） ========== -->
+    <div class="skill-bar">
+        <div class="skill-slot" id="skillSlot1">
+            <button class="skill-btn" data-skill="kuangbao">
+                <div class="skill-icon">⚔️</div>
+                <div class="skill-name">狂暴</div>
+                <svg class="cd-ring" viewBox="0 0 64 64">
+                    <circle class="cd-bg" cx="32" cy="32" r="28"/>
+                    <circle class="cd-progress" cx="32" cy="32" r="28" id="cdProgress1"/>
+                </svg>
+                <span class="cd-text" id="cdText1"></span>
+            </button>
+        </div>
+        
+        <div class="skill-slot" id="skillSlot2">
+            <button class="skill-btn" data-skill="jinhua">
+                <div class="skill-icon">✨</div>
+                <div class="skill-name">进化</div>
+                <svg class="cd-ring" viewBox="0 0 64 64">
+                    <circle class="cd-bg" cx="32" cy="32" r="28"/>
+                    <circle class="cd-progress" cx="32" cy="32" r="28" id="cdProgress2"/>
+                </svg>
+                <span class="cd-text" id="cdText2"></span>
+            </button>
+        </div>
+        
+        <div class="skill-slot" id="skillSlot3">
+            <button class="skill-btn" data-skill="juling">
+                <div class="skill-icon">💰</div>
+                <div class="skill-name">聚灵</div>
+                <svg class="cd-ring" viewBox="0 0 64 64">
+                    <circle class="cd-bg" cx="32" cy="32" r="28"/>
+                    <circle class="cd-progress" cx="32" cy="32" r="28" id="cdProgress3"/>
+                </svg>
+                <span class="cd-text" id="cdText3"></span>
+            </button>
+        </div>
+        
+        <div class="skill-slot" id="skillSlot4">
+            <button class="skill-btn menu-trigger" id="menuBtn">
+                <div class="skill-icon">☰</div>
+                <div class="skill-name">菜单</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== 2.5 弹窗系统 ========== -->
+    
+    <!-- 主菜单弹窗 -->
+    <div class="modal" id="menuModal">
+        <div class="modal-content">
+            <h2>修仙菜单</h2>
+            <div class="menu-list">
+                <button class="menu-item" id="rebirthMenuBtn">
+                    <span class="menu-icon">🔄</span>
+                    <span class="menu-text">轮回转世</span>
+                </button>
+                <button class="menu-item" id="artifactMenuBtn">
+                    <span class="menu-icon">🏺</span>
+                    <span class="menu-text">上古神器</span>
+                </button>
+                <button class="menu-item" id="statsMenuBtn">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">修仙数据</span>
+                </button>
+            </div>
+            <button class="modal-close" id="closeMenu">关闭</button>
+        </div>
+    </div>
+
+    <!-- 神器界面 -->
+    <div class="modal" id="artifactModal">
+        <div class="modal-content artifact-content">
+            <h2>🏺 上古神器</h2>
+            <div class="artifact-points">
+                可用道心: <span id="artifactPoints">0</span>
+            </div>
+            <div class="artifact-list" id="artifactList">
+                <!-- 动态生成神器列表 -->
+            </div>
+            <button class="modal-close" id="closeArtifact">关闭</button>
+        </div>
+    </div>
+
+    <!-- 转生确认弹窗 -->
+    <div class="modal" id="rebirthModal">
+        <div class="modal-content">
+            <h2>🔄 轮回转世</h2>
+            <div class="rebirth-info">
+                <p>转世后将:</p>
+                <ul>
+                    <li class="keep">✅ 保留: 神器、灵兽解锁状态、道心</li>
+                    <li class="reset">❌ 重置: 境界、灵石、灵兽等级、层数</li>
+                </ul>
+                <div class="rebirth-reward">
+                    <span>预计获得道心:</span>
+                    <span class="reward-value" id="rebirthReward">0</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-confirm" id="confirmRebirth">确认转世</button>
+                <button class="btn-cancel" id="cancelRebirth">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据弹窗 -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content">
+            <h2>📊 修仙数据</h2>
+            <div class="stats-list">
+                <div class="stat-item">
+                    <span class="stat-label">总点击次数</span>
+                    <span class="stat-value" id="statClicks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总击杀怪物</span>
+                    <span class="stat-value" id="statKills">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">累计获得灵石</span>
+                    <span class="stat-value" id="statTotalGold">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">转世次数</span>
+                    <span class="stat-value" id="statRebirths">0</span>
+                </div>
+            </div>
+            <button class="modal-close" id="closeStats">关闭</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
