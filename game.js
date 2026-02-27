@@ -629,7 +629,8 @@ class XiuxianGame {
             document.getElementById('confirmRebirth').disabled = !this.canRebirth();
             this.showModal('rebirthModal');
         };
-        document.getElementById('closeRebirth')?.onclick = () => this.hideModal('rebirthModal');
+        const closeRebirthBtn = document.getElementById('closeRebirth');
+        if (closeRebirthBtn) closeRebirthBtn.onclick = () => this.hideModal('rebirthModal');
         document.getElementById('cancelRebirth').onclick = () => this.hideModal('rebirthModal');
         document.getElementById('confirmRebirth').onclick = () => {
             if (this.doRebirth()) {
